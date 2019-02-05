@@ -17,7 +17,6 @@ import de.fu_berlin.inf.dpp.negotiation.NegotiationTools.CancelOption;
 import de.fu_berlin.inf.dpp.net.IReceiver;
 import de.fu_berlin.inf.dpp.net.ITransmitter;
 import de.fu_berlin.inf.dpp.net.PacketCollector;
-import de.fu_berlin.inf.dpp.net.xmpp.JID;
 import de.fu_berlin.inf.dpp.net.xmpp.XMPPConnectionService;
 import de.fu_berlin.inf.dpp.session.ISarosSession;
 import de.fu_berlin.inf.dpp.session.ISarosSessionManager;
@@ -53,7 +52,7 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
   private PacketCollector startActivityQueuingResponseCollector;
 
   protected AbstractOutgoingProjectNegotiation( //
-      final JID peer, //
+      final User remoteUser, //
       final ProjectSharingData projects, //
       final ISarosSessionManager sessionManager, //
       final ISarosSession session, //
@@ -66,7 +65,7 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
       ) {
     super(
         String.valueOf(NEGOTIATION_ID_GENERATOR.nextLong()),
-        peer,
+        remoteUser.getJID(),
         sessionManager,
         session,
         workspace,

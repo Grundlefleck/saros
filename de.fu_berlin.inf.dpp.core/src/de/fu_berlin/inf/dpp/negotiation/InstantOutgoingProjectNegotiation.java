@@ -14,7 +14,6 @@ import de.fu_berlin.inf.dpp.negotiation.NegotiationTools.CancelOption;
 import de.fu_berlin.inf.dpp.negotiation.stream.OutgoingStreamProtocol;
 import de.fu_berlin.inf.dpp.net.IReceiver;
 import de.fu_berlin.inf.dpp.net.ITransmitter;
-import de.fu_berlin.inf.dpp.net.xmpp.JID;
 import de.fu_berlin.inf.dpp.net.xmpp.XMPPConnectionService;
 import de.fu_berlin.inf.dpp.session.ISarosSession;
 import de.fu_berlin.inf.dpp.session.ISarosSessionManager;
@@ -62,7 +61,7 @@ public class InstantOutgoingProjectNegotiation extends AbstractOutgoingProjectNe
   private User remoteUser = null;
 
   public InstantOutgoingProjectNegotiation(
-      final JID peer, //
+      final User remoteUser, //
       final ProjectSharingData projects, //
       final ISarosSessionManager sessionManager, //
       final ISarosSession session, //
@@ -74,7 +73,7 @@ public class InstantOutgoingProjectNegotiation extends AbstractOutgoingProjectNe
       final IReceiver receiver) //
       {
     super(
-        peer,
+        remoteUser,
         projects,
         sessionManager,
         session,
