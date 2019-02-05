@@ -133,7 +133,7 @@ public class InstantOutgoingProjectNegotiation extends AbstractOutgoingProjectNe
     log.debug(this + ": file transfer start");
     assert fileTransferManager != null;
 
-    String message = "Sending files to " + getRemoteUser() + "...";
+    String message = "Sending files to " + getRemoteUser().getJID().getName() + "...";
     monitor.beginTask(message, transferList.size());
 
     /* use piped stream to communicate with transfer thread */

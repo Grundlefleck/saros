@@ -218,7 +218,7 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
     LOG.debug(this + " : waiting for remote file list");
 
     monitor.beginTask(
-        "Waiting for " + getRemoteUser() + " to choose project(s) location",
+        "Waiting for " + getRemoteUser().getJID().getName() + " to choose project(s) location",
         IProgressMonitor.UNKNOWN);
 
     checkCancellation(CancelOption.NOTIFY_PEER);
@@ -377,7 +377,9 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
       throws IOException, SarosCancellationException {
 
     monitor.beginTask(
-        "Waiting for " + getRemoteUser() + " to perform additional initialization...",
+        "Waiting for "
+            + getRemoteUser().getJID().getName()
+            + " to perform additional initialization...",
         IProgressMonitor.UNKNOWN);
 
     transmitter.send(
@@ -391,7 +393,7 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
     if (packet == null)
       throw new LocalCancellationException(
           "received no response from "
-              + getRemoteUser()
+              + getRemoteUser().getJID().getName()
               + " while waiting to finish additional initialization",
           CancelOption.DO_NOT_NOTIFY_PEER);
 

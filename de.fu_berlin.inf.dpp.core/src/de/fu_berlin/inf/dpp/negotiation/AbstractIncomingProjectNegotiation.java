@@ -477,7 +477,9 @@ public abstract class AbstractIncomingProjectNegotiation extends ProjectNegotiat
       throws SarosCancellationException {
 
     monitor.beginTask(
-        "Waiting for " + getRemoteUser() + " to continue the project negotiation...",
+        "Waiting for "
+            + getRemoteUser().getJID().getName()
+            + " to continue the project negotiation...",
         IProgressMonitor.UNKNOWN);
 
     Packet packet = collectPacket(startActivityQueuingRequestCollector, PACKET_TIMEOUT);
