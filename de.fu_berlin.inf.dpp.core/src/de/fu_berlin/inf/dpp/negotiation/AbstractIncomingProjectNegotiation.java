@@ -17,12 +17,12 @@ import de.fu_berlin.inf.dpp.negotiation.NegotiationTools.CancelOption;
 import de.fu_berlin.inf.dpp.net.IReceiver;
 import de.fu_berlin.inf.dpp.net.ITransmitter;
 import de.fu_berlin.inf.dpp.net.PacketCollector;
-import de.fu_berlin.inf.dpp.net.xmpp.JID;
 import de.fu_berlin.inf.dpp.net.xmpp.XMPPConnectionService;
 import de.fu_berlin.inf.dpp.observables.FileReplacementInProgressObservable;
 import de.fu_berlin.inf.dpp.session.ISarosSession;
 import de.fu_berlin.inf.dpp.session.ISarosSessionManager;
 import de.fu_berlin.inf.dpp.session.SessionEndReason;
+import de.fu_berlin.inf.dpp.session.User;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +61,7 @@ public abstract class AbstractIncomingProjectNegotiation extends ProjectNegotiat
   protected TransferListener transferListener = null;
 
   public AbstractIncomingProjectNegotiation(
-      final JID peer, //
+      final User remoteUser, //
       final String negotiationID, //
       final List<ProjectNegotiationData> projectNegotiationData, //
       final ISarosSessionManager sessionManager, //
@@ -75,7 +75,7 @@ public abstract class AbstractIncomingProjectNegotiation extends ProjectNegotiat
       ) {
     super(
         negotiationID,
-        peer,
+        remoteUser.getJID(),
         sessionManager,
         session,
         workspace,

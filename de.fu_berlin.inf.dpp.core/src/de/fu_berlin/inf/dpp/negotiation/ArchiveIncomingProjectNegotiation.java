@@ -11,11 +11,11 @@ import de.fu_berlin.inf.dpp.monitoring.SubProgressMonitor;
 import de.fu_berlin.inf.dpp.negotiation.NegotiationTools.CancelOption;
 import de.fu_berlin.inf.dpp.net.IReceiver;
 import de.fu_berlin.inf.dpp.net.ITransmitter;
-import de.fu_berlin.inf.dpp.net.xmpp.JID;
 import de.fu_berlin.inf.dpp.net.xmpp.XMPPConnectionService;
 import de.fu_berlin.inf.dpp.observables.FileReplacementInProgressObservable;
 import de.fu_berlin.inf.dpp.session.ISarosSession;
 import de.fu_berlin.inf.dpp.session.ISarosSessionManager;
+import de.fu_berlin.inf.dpp.session.User;
 import de.fu_berlin.inf.dpp.util.CoreUtils;
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class ArchiveIncomingProjectNegotiation extends AbstractIncomingProjectNe
   private static final Logger LOG = Logger.getLogger(ArchiveIncomingProjectNegotiation.class);
 
   public ArchiveIncomingProjectNegotiation(
-      final JID peer, //
+      final User remoteUser, //
       final String negotiationID, //
       final List<ProjectNegotiationData> projectNegotiationData, //
       final ISarosSessionManager sessionManager, //
@@ -49,7 +49,7 @@ public class ArchiveIncomingProjectNegotiation extends AbstractIncomingProjectNe
       final IReceiver receiver //
       ) {
     super(
-        peer,
+        remoteUser,
         negotiationID,
         projectNegotiationData,
         sessionManager,
