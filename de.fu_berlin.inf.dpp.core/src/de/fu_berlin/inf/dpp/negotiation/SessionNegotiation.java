@@ -91,7 +91,11 @@ public abstract class SessionNegotiation extends Negotiation {
     return description;
   }
 
-  @Override
+  /**
+   * Returns the JID of the peer with which the negotiation takes place.
+   *
+   * @return peer JID
+   */
   public JID getPeer() {
     return peer;
   }

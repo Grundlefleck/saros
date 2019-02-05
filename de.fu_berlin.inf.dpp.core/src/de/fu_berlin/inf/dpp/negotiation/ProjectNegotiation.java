@@ -162,7 +162,11 @@ public abstract class ProjectNegotiation extends Negotiation {
     listener.negotiationTerminated(this);
   }
 
-  @Override
+  /**
+   * Returns the JID of the peer with which the negotiation takes place.
+   *
+   * @return peer JID
+   */
   public JID getPeer() {
     return remoteUser.getJID();
   }

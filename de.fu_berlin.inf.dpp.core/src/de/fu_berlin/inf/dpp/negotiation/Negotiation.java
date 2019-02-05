@@ -9,7 +9,6 @@ import de.fu_berlin.inf.dpp.negotiation.NegotiationTools.CancelOption;
 import de.fu_berlin.inf.dpp.net.IReceiver;
 import de.fu_berlin.inf.dpp.net.ITransmitter;
 import de.fu_berlin.inf.dpp.net.PacketCollector;
-import de.fu_berlin.inf.dpp.net.xmpp.JID;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -63,7 +62,6 @@ abstract class Negotiation {
    * Creates a Negotiation.
    *
    * @param id unique ID of the negotiation
-   * @param peer JID of the peer to negotiate with
    * @param transmitter transmitter used for sending negotiation messages
    * @param receiver receiver used for receiving negotiation messages
    */
@@ -82,13 +80,6 @@ abstract class Negotiation {
   public String getID() {
     return id;
   }
-
-  /**
-   * Returns the JID of the peer with which the negotiation takes place.
-   *
-   * @return peer JID
-   */
-  public abstract JID getPeer();
 
   /**
    * Sets a {@linkplain NegotiationListener negotiation listener} for the negotiation.
