@@ -37,9 +37,6 @@ abstract class Negotiation {
 
   private final String id;
 
-  // FIMXE make this final (do not obtain the JID during the Negotiation !)
-  private JID peer;
-
   protected final ITransmitter transmitter;
 
   protected final IReceiver receiver;
@@ -70,10 +67,8 @@ abstract class Negotiation {
    * @param transmitter transmitter used for sending negotiation messages
    * @param receiver receiver used for receiving negotiation messages
    */
-  protected Negotiation(
-      String id, JID peer, final ITransmitter transmitter, final IReceiver receiver) {
+  protected Negotiation(String id, final ITransmitter transmitter, final IReceiver receiver) {
     this.id = id;
-    this.peer = peer;
     this.transmitter = transmitter;
     this.receiver = receiver;
   }
@@ -93,21 +88,7 @@ abstract class Negotiation {
    *
    * @return peer JID
    */
-  public JID getPeer() {
-    return peer;
-  }
-
-  /**
-   * Changes the peer to negotiate with.
-   *
-   * @param peer new peer JID
-   * @deprecated The peer JID should remain constant during the negotiation. Code using this method
-   *     should be changed to find out the correct peer JID before the negotiation starts.
-   */
-  @Deprecated
-  protected void setPeer(JID peer) {
-    this.peer = peer;
-  }
+  public abstract JID getPeer();
 
   /**
    * Sets a {@linkplain NegotiationListener negotiation listener} for the negotiation.

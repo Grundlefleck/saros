@@ -12,6 +12,7 @@ import de.fu_berlin.inf.dpp.monitoring.MonitorableFileTransfer.TransferStatus;
 import de.fu_berlin.inf.dpp.negotiation.NegotiationTools.CancelOption;
 import de.fu_berlin.inf.dpp.net.IReceiver;
 import de.fu_berlin.inf.dpp.net.ITransmitter;
+import de.fu_berlin.inf.dpp.net.xmpp.JID;
 import de.fu_berlin.inf.dpp.net.xmpp.XMPPConnectionService;
 import de.fu_berlin.inf.dpp.session.ISarosSession;
 import de.fu_berlin.inf.dpp.session.ISarosSessionManager;
@@ -55,6 +56,8 @@ public abstract class ProjectNegotiation extends Negotiation {
 
   protected final IChecksumCache checksumCache;
 
+  private final User remoteUser;
+
   /**
    * The file transfer manager can be <code>null</code> if no connection was established or was lost
    * when the class was instantiated.
@@ -71,8 +74,9 @@ public abstract class ProjectNegotiation extends Negotiation {
       final XMPPConnectionService connectionService,
       final ITransmitter transmitter,
       final IReceiver receiver) {
-    super(id, remoteUser.getJID(), transmitter, receiver);
+    super(id, transmitter, receiver);
 
+    this.remoteUser = remoteUser;
     this.sessionManager = sessionManager;
     this.session = session;
     this.sessionID = session.getID();
@@ -154,5 +158,10 @@ public abstract class ProjectNegotiation extends Negotiation {
   @Override
   protected void notifyTerminated(NegotiationListener listener) {
     listener.negotiationTerminated(this);
+  }
+
+  @Override
+  public JID getPeer() {
+    return remoteUser.getJID();
   }
 }

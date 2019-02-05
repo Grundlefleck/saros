@@ -67,6 +67,9 @@ public abstract class SessionNegotiation extends Negotiation {
 
   protected ISarosSession sarosSession;
 
+  // FIMXE make this final (do not obtain the JID during the Negotiation !)
+  private JID peer;
+
   public SessionNegotiation(
       final String id,
       final JID peer,
@@ -75,8 +78,9 @@ public abstract class SessionNegotiation extends Negotiation {
       final SessionNegotiationHookManager hookManager,
       final ITransmitter transmitter,
       final IReceiver receiver) {
-    super(id, peer, transmitter, receiver);
+    super(id, transmitter, receiver);
 
+    this.peer = peer;
     this.sessionManager = sessionManager;
     this.hookManager = hookManager;
     this.description = description;
@@ -85,6 +89,23 @@ public abstract class SessionNegotiation extends Negotiation {
   /** @return the user-provided informal description that can be provided with an invitation. */
   public String getDescription() {
     return description;
+  }
+
+  @Override
+  public JID getPeer() {
+    return peer;
+  }
+
+  /**
+   * Changes the peer to negotiate with.
+   *
+   * @param peer new peer JID
+   * @deprecated The peer JID should remain constant during the negotiation. Code using this method
+   *     should be changed to find out the correct peer JID before the negotiation starts.
+   */
+  @Deprecated
+  protected void setPeer(JID peer) {
+    this.peer = peer;
   }
 
   @Override
