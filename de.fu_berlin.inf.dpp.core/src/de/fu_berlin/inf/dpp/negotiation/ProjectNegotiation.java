@@ -12,10 +12,10 @@ import de.fu_berlin.inf.dpp.monitoring.MonitorableFileTransfer.TransferStatus;
 import de.fu_berlin.inf.dpp.negotiation.NegotiationTools.CancelOption;
 import de.fu_berlin.inf.dpp.net.IReceiver;
 import de.fu_berlin.inf.dpp.net.ITransmitter;
-import de.fu_berlin.inf.dpp.net.xmpp.JID;
 import de.fu_berlin.inf.dpp.net.xmpp.XMPPConnectionService;
 import de.fu_berlin.inf.dpp.session.ISarosSession;
 import de.fu_berlin.inf.dpp.session.ISarosSessionManager;
+import de.fu_berlin.inf.dpp.session.User;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.jivesoftware.smack.Connection;
@@ -63,7 +63,7 @@ public abstract class ProjectNegotiation extends Negotiation {
 
   public ProjectNegotiation(
       final String id,
-      final JID peer,
+      final User remoteUser,
       final ISarosSessionManager sessionManager,
       final ISarosSession session,
       final IWorkspace workspace,
@@ -71,7 +71,7 @@ public abstract class ProjectNegotiation extends Negotiation {
       final XMPPConnectionService connectionService,
       final ITransmitter transmitter,
       final IReceiver receiver) {
-    super(id, peer, transmitter, receiver);
+    super(id, remoteUser.getJID(), transmitter, receiver);
 
     this.sessionManager = sessionManager;
     this.session = session;
