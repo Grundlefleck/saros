@@ -130,7 +130,7 @@ public abstract class AbstractIncomingProjectNegotiation extends ProjectNegotiat
 
       transmitter.send(
           ISarosSession.SESSION_CONNECTION_ID,
-          getPeer(),
+          getRemoteUser().getJID(),
           ProjectNegotiationMissingFilesExtension.PROVIDER.create(
               new ProjectNegotiationMissingFilesExtension(getSessionID(), getID(), missingFiles)));
 
@@ -165,12 +165,12 @@ public abstract class AbstractIncomingProjectNegotiation extends ProjectNegotiat
        * bound to its use in OutgoingProjectNegotiation.
        */
       if (session.isHost()) {
-        session.userStartedQueuing(session.getUser(getPeer()));
+        session.userStartedQueuing(getRemoteUser());
       }
 
       transmitter.send(
           ISarosSession.SESSION_CONNECTION_ID,
-          getPeer(),
+          getRemoteUser().getJID(),
           StartActivityQueuingResponse.PROVIDER.create(
               new StartActivityQueuingResponse(getSessionID(), getID())));
 
@@ -477,7 +477,7 @@ public abstract class AbstractIncomingProjectNegotiation extends ProjectNegotiat
       throws SarosCancellationException {
 
     monitor.beginTask(
-        "Waiting for " + getPeer().getName() + " to continue the project negotiation...",
+        "Waiting for " + getRemoteUser() + " to continue the project negotiation...",
         IProgressMonitor.UNKNOWN);
 
     Packet packet = collectPacket(startActivityQueuingRequestCollector, PACKET_TIMEOUT);
@@ -485,7 +485,7 @@ public abstract class AbstractIncomingProjectNegotiation extends ProjectNegotiat
     if (packet == null)
       throw new LocalCancellationException(
           "received no response from "
-              + getPeer()
+              + getRemoteUser()
               + " while waiting to continue the project negotiation",
           CancelOption.DO_NOT_NOTIFY_PEER);
 
@@ -525,7 +525,7 @@ public abstract class AbstractIncomingProjectNegotiation extends ProjectNegotiat
 
   @Override
   public String toString() {
-    return "IPN [remote side: " + getPeer() + "]";
+    return "IPN [remote side: " + getRemoteUser() + "]";
   }
 
   /**

@@ -13,7 +13,6 @@ import de.fu_berlin.inf.dpp.monitoring.IProgressMonitor;
 import de.fu_berlin.inf.dpp.negotiation.NegotiationTools.CancelOption;
 import de.fu_berlin.inf.dpp.net.IReceiver;
 import de.fu_berlin.inf.dpp.net.ITransmitter;
-import de.fu_berlin.inf.dpp.net.xmpp.JID;
 import de.fu_berlin.inf.dpp.net.xmpp.XMPPConnectionService;
 import de.fu_berlin.inf.dpp.session.ISarosSession;
 import de.fu_berlin.inf.dpp.session.ISarosSessionManager;
@@ -80,9 +79,8 @@ public class ArchiveOutgoingProjectNegotiation extends AbstractOutgoingProjectNe
       sendAndAwaitActivityQueueingActivation(monitor);
       monitor.subTask("");
 
-      User user = session.getUser(getPeer());
-
-      if (user == null) throw new LocalCancellationException(null, CancelOption.DO_NOT_NOTIFY_PEER);
+      if (!getRemoteUser().isInSession())
+        throw new LocalCancellationException(null, CancelOption.DO_NOT_NOTIFY_PEER);
 
       /*
        * inform all listeners that the peer has started queuing and can
@@ -93,7 +91,7 @@ public class ArchiveOutgoingProjectNegotiation extends AbstractOutgoingProjectNe
        * this time. Maybe change the description of the listener interface
        * ?
        */
-      session.userStartedQueuing(user);
+      session.userStartedQueuing(getRemoteUser());
 
       zipArchive = createProjectArchive(fileLists, monitor);
       monitor.subTask("");
@@ -105,8 +103,7 @@ public class ArchiveOutgoingProjectNegotiation extends AbstractOutgoingProjectNe
   @Override
   protected void transfer(IProgressMonitor monitor, List<FileList> fileLists)
       throws SarosCancellationException, IOException {
-    if (zipArchive != null)
-      sendArchive(zipArchive, getPeer(), TRANSFER_ID_PREFIX + getID(), monitor);
+    if (zipArchive != null) sendArchive(zipArchive, TRANSFER_ID_PREFIX + getID(), monitor);
   }
 
   @Override
@@ -196,8 +193,7 @@ public class ArchiveOutgoingProjectNegotiation extends AbstractOutgoingProjectNe
     return tempArchive;
   }
 
-  private void sendArchive(
-      File archive, JID remoteContact, String transferID, IProgressMonitor monitor)
+  private void sendArchive(File archive, String transferID, IProgressMonitor monitor)
       throws SarosCancellationException, IOException {
 
     LOG.debug(this + " : sending archive");
@@ -207,7 +203,7 @@ public class ArchiveOutgoingProjectNegotiation extends AbstractOutgoingProjectNe
 
     try {
       OutgoingFileTransfer transfer =
-          fileTransferManager.createOutgoingFileTransfer(remoteContact.toString());
+          fileTransferManager.createOutgoingFileTransfer(getRemoteUser().getJID().toString());
 
       transfer.sendFile(archive, transferID);
       monitorFileTransfer(transfer, monitor);

@@ -71,7 +71,7 @@ public class InstantIncomingProjectNegotiation extends AbstractIncomingProjectNe
   private void receiveStream(IProgressMonitor monitor, int fileCount)
       throws SarosCancellationException, IOException {
 
-    String message = "Receiving files from " + getPeer().getName() + "...";
+    String message = "Receiving files from " + getRemoteUser() + "...";
     monitor.beginTask(message, fileCount);
     monitor.subTask("Waiting for Host to start...");
 

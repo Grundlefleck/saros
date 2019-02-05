@@ -116,10 +116,10 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
 
       transfer(monitor, fileLists);
 
-      User user = session.getUser(getPeer());
-      if (user == null) throw new LocalCancellationException(null, CancelOption.DO_NOT_NOTIFY_PEER);
+      if (!getRemoteUser().isInSession())
+        throw new LocalCancellationException(null, CancelOption.DO_NOT_NOTIFY_PEER);
 
-      session.userFinishedProjectNegotiation(user);
+      session.userFinishedProjectNegotiation(getRemoteUser());
     } catch (Exception e) {
       exception = e;
     } finally {
@@ -201,7 +201,7 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
 
     transmitter.send(
         ISarosSession.SESSION_CONNECTION_ID,
-        getPeer(),
+        getRemoteUser().getJID(),
         ProjectNegotiationOfferingExtension.PROVIDER.create(offering));
   }
 
@@ -218,7 +218,7 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
     LOG.debug(this + " : waiting for remote file list");
 
     monitor.beginTask(
-        "Waiting for " + getPeer().getName() + " to choose project(s) location",
+        "Waiting for " + getRemoteUser() + " to choose project(s) location",
         IProgressMonitor.UNKNOWN);
 
     checkCancellation(CancelOption.NOTIFY_PEER);
@@ -227,7 +227,7 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
 
     if (packet == null)
       throw new LocalCancellationException(
-          "received no response from " + getPeer() + " while waiting for the file list",
+          "received no response from " + getRemoteUser() + " while waiting for the file list",
           CancelOption.DO_NOT_NOTIFY_PEER);
 
     List<FileList> remoteFileLists =
@@ -377,12 +377,12 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
       throws IOException, SarosCancellationException {
 
     monitor.beginTask(
-        "Waiting for " + getPeer().getName() + " to perform additional initialization...",
+        "Waiting for " + getRemoteUser() + " to perform additional initialization...",
         IProgressMonitor.UNKNOWN);
 
     transmitter.send(
         ISarosSession.SESSION_CONNECTION_ID,
-        getPeer(),
+        getRemoteUser().getJID(),
         StartActivityQueuingRequest.PROVIDER.create(
             new StartActivityQueuingRequest(getSessionID(), getID())));
 
@@ -391,7 +391,7 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
     if (packet == null)
       throw new LocalCancellationException(
           "received no response from "
-              + getPeer()
+              + getRemoteUser()
               + " while waiting to finish additional initialization",
           CancelOption.DO_NOT_NOTIFY_PEER);
 
@@ -400,6 +400,6 @@ public abstract class AbstractOutgoingProjectNegotiation extends ProjectNegotiat
 
   @Override
   public String toString() {
-    return "OPN [remote side: " + getPeer() + "]";
+    return "OPN [remote side: " + getRemoteUser() + "]";
   }
 }

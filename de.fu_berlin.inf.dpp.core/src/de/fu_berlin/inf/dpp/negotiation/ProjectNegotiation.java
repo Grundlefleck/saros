@@ -107,16 +107,18 @@ public abstract class ProjectNegotiation extends Negotiation {
     if (cause.getCancelOption() != CancelOption.NOTIFY_PEER) return;
 
     LOG.debug(
-        "notifying remote contact " + getPeer() + " of the local project negotiation cancellation");
+        "notifying remote contact "
+            + remoteUser
+            + " of the local project negotiation cancellation");
 
     PacketExtension notification =
         CancelProjectNegotiationExtension.PROVIDER.create(
             new CancelProjectNegotiationExtension(getSessionID(), getID(), cause.getMessage()));
 
     try {
-      transmitter.send(ISarosSession.SESSION_CONNECTION_ID, getPeer(), notification);
+      transmitter.send(ISarosSession.SESSION_CONNECTION_ID, remoteUser.getJID(), notification);
     } catch (IOException e) {
-      transmitter.sendPacketExtension(getPeer(), notification);
+      transmitter.sendPacketExtension(remoteUser.getJID(), notification);
     }
   }
 
@@ -163,5 +165,9 @@ public abstract class ProjectNegotiation extends Negotiation {
   @Override
   public JID getPeer() {
     return remoteUser.getJID();
+  }
+
+  public User getRemoteUser() {
+    return remoteUser;
   }
 }
