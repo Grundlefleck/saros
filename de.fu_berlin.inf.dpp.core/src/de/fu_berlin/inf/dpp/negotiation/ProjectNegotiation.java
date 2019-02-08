@@ -165,8 +165,10 @@ public abstract class ProjectNegotiation extends Negotiation {
   /**
    * Returns the JID of the peer with which the negotiation takes place.
    *
+   * @deprecated because the JID should only be used in the network context
    * @return peer JID
    */
+  @Deprecated
   public JID getPeer() {
     return remoteUser.getJID();
   }
