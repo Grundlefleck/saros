@@ -1,6 +1,7 @@
 package saros.core.project.internal;
 
 import org.picocontainer.MutablePicoContainer;
+import saros.intellij.editor.EditorAPI;
 import saros.intellij.editor.LocalEditorHandler;
 import saros.intellij.editor.LocalEditorManipulator;
 import saros.intellij.editor.SelectedEditorStateSnapshotFactory;
@@ -27,6 +28,7 @@ public class SarosIntellijSessionContextFactory extends SarosCoreSessionContextF
   @Override
   public void createNonCoreComponents(ISarosSession session, MutablePicoContainer container) {
     // Editor interaction
+    container.addComponent(EditorAPI.class);
     container.addComponent(LocalEditorHandler.class);
     container.addComponent(LocalEditorManipulator.class);
     container.addComponent(SelectedEditorStateSnapshotFactory.class);
