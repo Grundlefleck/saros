@@ -441,6 +441,8 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
 
           userEditorStateManager = session.getComponent(UserEditorStateManager.class);
 
+          projectAPI = sarosSession.getComponent(ProjectAPI.class);
+
           editorAPI = sarosSession.getComponent(EditorAPI.class);
           localEditorHandler = sarosSession.getComponent(LocalEditorHandler.class);
           localEditorManipulator = sarosSession.getComponent(LocalEditorManipulator.class);
@@ -471,6 +473,8 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
           session = null;
 
           userEditorStateManager = null;
+
+          projectAPI = null;
 
           editorAPI = null;
           localEditorHandler = null;
@@ -531,11 +535,11 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
       };
 
   private final FileReplacementInProgressObservable fileReplacementInProgressObservable;
-  private final ProjectAPI projectAPI;
 
   /* Session Components */
   private UserEditorStateManager userEditorStateManager;
   private ISarosSession session;
+  private ProjectAPI projectAPI;
   private EditorAPI editorAPI;
   private LocalEditorHandler localEditorHandler;
   private LocalEditorManipulator localEditorManipulator;
@@ -568,12 +572,10 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
 
   public EditorManager(
       ISarosSessionManager sessionManager,
-      ProjectAPI projectAPI,
       FileReplacementInProgressObservable fileReplacementInProgressObservable) {
 
     sessionManager.addSessionLifecycleListener(sessionLifecycleListener);
     this.fileReplacementInProgressObservable = fileReplacementInProgressObservable;
-    this.projectAPI = projectAPI;
   }
 
   @Override
