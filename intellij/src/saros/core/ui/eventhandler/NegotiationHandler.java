@@ -1,11 +1,7 @@
 package saros.core.ui.eventhandler;
 
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 import java.awt.Window;
 import java.text.MessageFormat;
@@ -16,6 +12,7 @@ import saros.intellij.SarosComponent;
 import saros.intellij.runtime.UIMonitoredJob;
 import saros.intellij.ui.Messages;
 import saros.intellij.ui.util.NotificationPanel;
+import saros.intellij.ui.util.UIActiveProjectProvider;
 import saros.intellij.ui.wizards.AddProjectToSessionWizard;
 import saros.intellij.ui.wizards.JoinSessionWizard;
 import saros.monitoring.IProgressMonitor;
@@ -38,10 +35,15 @@ public class NegotiationHandler implements INegotiationHandler {
 
   private static final Logger LOG = Logger.getLogger(NegotiationHandler.class);
   private final ISarosSessionManager sessionManager;
+  private final UIActiveProjectProvider activeProjectProvider;
 
-  public NegotiationHandler(ISarosSessionManager sessionManager) {
+  public NegotiationHandler(
+      ISarosSessionManager sessionManager, UIActiveProjectProvider activeProjectProvider) {
+
     sessionManager.setNegotiationHandler(this);
+
     this.sessionManager = sessionManager;
+    this.activeProjectProvider = activeProjectProvider;
   }
 
   private static String getNickname(JID jid) {
@@ -106,10 +108,8 @@ public class NegotiationHandler implements INegotiationHandler {
             ModalityState.defaultModalityState());
   }
 
-  private static Window getWindow() {
-    DataContext dataContext = DataManager.getInstance().getDataContext();
-    Project project = DataKeys.PROJECT.getData(dataContext);
-    return WindowManager.getInstance().getFrame(project);
+  private Window getWindow() {
+    return WindowManager.getInstance().getFrame(activeProjectProvider.getProject());
   }
   /**
    * OutgoingInvitationJob wraps the instance of {@link OutgoingSessionNegotiation} and cares about
