@@ -31,6 +31,7 @@ import saros.intellij.runtime.IntelliJSynchronizer;
 import saros.intellij.ui.eventhandler.SessionStatusChangeHandler;
 import saros.intellij.ui.swt_browser.IntelliJDialogManager;
 import saros.intellij.ui.swt_browser.IntelliJUIResourceLocator;
+import saros.intellij.ui.util.UIActiveProjectProvider;
 import saros.monitoring.remote.IRemoteProgressIndicatorFactory;
 import saros.preferences.IPreferenceStore;
 import saros.preferences.Preferences;
@@ -65,6 +66,9 @@ public class SarosIntellijContextFactory extends AbstractContextFactory {
       Component.create(Preferences.class, IntelliJPreferences.class),
       Component.create(
           IRemoteProgressIndicatorFactory.class, IntelliJRemoteProgressIndicatorFactoryImpl.class),
+
+      // Project access provider for UI
+      Component.create(UIActiveProjectProvider.class),
 
       // IDE-specific classes for the HTML GUI
       Component.create(DialogManager.class, IntelliJDialogManager.class),
