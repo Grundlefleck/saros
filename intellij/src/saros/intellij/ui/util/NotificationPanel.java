@@ -22,7 +22,7 @@ public class NotificationPanel {
   private static final NotificationListener.UrlOpeningListener URL_OPENING_LISTENER =
       new NotificationListener.UrlOpeningListener(false);
 
-  @Inject private static Project project;
+  @Inject private static UIActiveProjectProvider activeProjectProvider;
 
   static {
     SarosPluginContext.initComponent(new NotificationPanel());
@@ -47,11 +47,14 @@ public class NotificationPanel {
   private static void showNotification(
       NotificationType notificationType, String message, String title) {
 
+    Project project = activeProjectProvider.getProject();
+
     LOG.info("Showing notification - " + notificationType + ": " + title + " - " + message);
 
     final Notification notification =
         GROUP_DISPLAY_ID_INFO.createNotification(
             title, message, notificationType, URL_OPENING_LISTENER);
+
     ApplicationManager.getApplication()
         .invokeLater(
             new Runnable() {

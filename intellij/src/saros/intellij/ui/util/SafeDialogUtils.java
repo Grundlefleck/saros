@@ -30,7 +30,7 @@ public class SafeDialogUtils {
 
   private static final Application application;
 
-  @Inject private static Project project;
+  @Inject private static UIActiveProjectProvider activeProjectProvider;
 
   static {
     application = ApplicationManager.getApplication();
@@ -59,6 +59,8 @@ public class SafeDialogUtils {
       throw new IllegalAWTContextException("AWT events are not allowed " + "inside write actions.");
     }
 
+    Project project = activeProjectProvider.getProject();
+
     LOG.info("Showing input dialog: " + title + " - " + message + " - " + initialValue);
 
     final AtomicReference<String> response = new AtomicReference<>();
@@ -81,6 +83,8 @@ public class SafeDialogUtils {
   }
 
   public static void showWarning(final String message, final String title) {
+    Project project = activeProjectProvider.getProject();
+
     LOG.info("Showing warning dialog: " + title + " - " + message);
 
     application.invokeLater(
@@ -94,6 +98,8 @@ public class SafeDialogUtils {
   }
 
   public static void showError(final String message, final String title) {
+    Project project = activeProjectProvider.getProject();
+
     LOG.info("Showing error dialog: " + title + " - " + message);
 
     application.invokeLater(
@@ -139,6 +145,8 @@ public class SafeDialogUtils {
       throw new IllegalAWTContextException("AWT events are not allowed " + "inside write actions.");
     }
 
+    Project project = activeProjectProvider.getProject();
+
     LOG.info("Showing password dialog: " + title + " - " + message);
 
     final AtomicReference<String> response = new AtomicReference<>();
@@ -172,6 +180,8 @@ public class SafeDialogUtils {
     if (application.isWriteAccessAllowed()) {
       throw new IllegalAWTContextException("AWT events are not allowed inside write actions.");
     }
+
+    Project project = activeProjectProvider.getProject();
 
     LOG.info("Showing yes/no dialog: " + title + " - " + message);
 

@@ -1,6 +1,5 @@
 package saros.intellij.ui.util;
 
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 import java.awt.Component;
 import java.awt.Container;
@@ -13,7 +12,7 @@ import saros.SarosPluginContext;
 public class DialogUtils {
   private static final Logger LOG = Logger.getLogger(DialogUtils.class);
 
-  @Inject private static Project project;
+  @Inject private static UIActiveProjectProvider activeProjectProvider;
 
   private DialogUtils() {}
 
@@ -92,6 +91,8 @@ public class DialogUtils {
   }
 
   private static Component notNullOrDefaultParent(Component parent) {
-    return parent != null ? parent : WindowManager.getInstance().getFrame(project);
+    return parent != null
+        ? parent
+        : WindowManager.getInstance().getFrame(activeProjectProvider.getProject());
   }
 }

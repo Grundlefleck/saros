@@ -3,10 +3,12 @@ package saros.intellij.ui.actions;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.project.Project;
 import org.picocontainer.annotations.Inject;
 import saros.account.XMPPAccount;
 import saros.account.XMPPAccountStore;
 import saros.communication.connection.ConnectionHandler;
+import saros.intellij.ui.util.UIActiveProjectProvider;
 
 /** Connects to XMPP/Jabber server with given account or active account */
 public class ConnectServerAction extends AbstractSarosAction {
@@ -15,6 +17,8 @@ public class ConnectServerAction extends AbstractSarosAction {
   @Inject private XMPPAccountStore accountStore;
 
   @Inject private ConnectionHandler connectionHandler;
+
+  @Inject private UIActiveProjectProvider activeProjectProvider;
 
   @Override
   public String getActionName() {
@@ -42,8 +46,8 @@ public class ConnectServerAction extends AbstractSarosAction {
    */
   private void connectAccount(final XMPPAccount account) {
 
-    // FIXME use the project from the action event !
-    // AnActionEvent.getDataContext().getData(DataConstants.PROJECT)
+    Project project = activeProjectProvider.getProject();
+
     ProgressManager.getInstance()
         .run(
             new Task.Modal(project, "Connecting...", false) {

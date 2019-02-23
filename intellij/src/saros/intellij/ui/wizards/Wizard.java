@@ -21,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import org.jetbrains.annotations.NotNull;
 import org.picocontainer.annotations.Inject;
 import saros.SarosPluginContext;
+import saros.intellij.ui.util.UIActiveProjectProvider;
 import saros.intellij.ui.wizards.pages.AbstractWizardPage;
 import saros.intellij.ui.wizards.pages.HeaderPanel;
 import saros.intellij.ui.wizards.pages.NavigationPanel;
@@ -72,6 +73,7 @@ public abstract class Wizard extends JDialog {
   private final NavigationPanel navigationPanel;
 
   @Inject protected Project project;
+  @Inject private UIActiveProjectProvider activeProjectProvider;
 
   /**
    * Constructor creates wizard structure.
@@ -172,6 +174,8 @@ public abstract class Wizard extends JDialog {
    * dialog using {@link ProgressManager#run(com.intellij.openapi.progress.Task)}.
    */
   public void runTask(final Runnable runnable, String title) {
+    Project project = activeProjectProvider.getProject();
+
     ProgressManager.getInstance()
         .run(
             new Task.Modal(project, title, false) {
