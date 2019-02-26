@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import saros.activities.EditorActivity;
 import saros.activities.EditorActivity.Type;
-import saros.activities.IActivity;
 import saros.activities.SPath;
 import saros.activities.TextEditActivity;
 import saros.activities.TextSelectionActivity;
@@ -25,7 +24,6 @@ import saros.activities.ViewportActivity;
 import saros.concurrent.jupiter.Operation;
 import saros.concurrent.jupiter.internal.text.DeleteOperation;
 import saros.concurrent.jupiter.internal.text.InsertOperation;
-import saros.core.editor.RemoteWriteAccessManager;
 import saros.editor.IEditorManager;
 import saros.editor.ISharedEditorListener;
 import saros.editor.SharedEditorListenerDispatch;
@@ -81,15 +79,6 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
 
   private final IActivityConsumer consumer =
       new AbstractActivityConsumer() {
-
-        @Override
-        public void exec(IActivity activity) {
-          // First let the remote manager update itself based on the
-          // Activity
-          remoteWriteAccessManager.exec(activity);
-
-          super.exec(activity);
-        }
 
         @Override
         public void receive(EditorActivity editorActivity) {
@@ -445,7 +434,6 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
           setLocalDocumentModificationHandlersEnabled(true);
 
           userEditorStateManager = session.getComponent(UserEditorStateManager.class);
-          remoteWriteAccessManager = new RemoteWriteAccessManager(session);
 
           // TODO: Test, whether this leads to problems because it is not called
           // from the UI thread.
@@ -469,8 +457,6 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
           session = null;
 
           userEditorStateManager = null;
-          remoteWriteAccessManager.dispose();
-          remoteWriteAccessManager = null;
         }
       };
 
@@ -486,7 +472,6 @@ public class EditorManager extends AbstractActivityProducer implements IEditorMa
   private final SharedEditorListenerDispatch editorListenerDispatch =
       new SharedEditorListenerDispatch();
   private UserEditorStateManager userEditorStateManager;
-  private RemoteWriteAccessManager remoteWriteAccessManager;
   private ISarosSession session;
 
   /* Event handlers */
